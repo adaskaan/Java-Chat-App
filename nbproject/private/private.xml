@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Client/Room.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Client/Menu.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Client/Message.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Server/Server.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Server/SRoom.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Server/SClient.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Server/ServerMain.java</file>
-            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatApp/src/Client/Client.java</file>
+            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatAppv2/src/newpackage/Server.java</file>
+            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatAppv2/src/newpackage/SClient.java</file>
+            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatAppv2/src/newpackage/Frm_Server.java</file>
+            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatAppv2/src/newpackage/Client.java</file>
+            <file>file:/C:/Users/Kaan/Documents/NetBeansProjects/ChatAppv2/src/newpackage/ServerMain.java</file>
         </group>
     </open-files>
 </project-private>
