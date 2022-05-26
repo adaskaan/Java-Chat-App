@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.chat_app;
+package App;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -166,7 +166,7 @@ public class Frm_Server extends javax.swing.JFrame {
             int port = Integer.parseInt(txt_port.getText());
             server = new Server(port);
             server.StartServer();
-
+            System.out.println("Server Started...");
         } catch (IOException ex) {
             Logger.getLogger(Frm_Server.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -175,7 +175,7 @@ public class Frm_Server extends javax.swing.JFrame {
     private void btn_sendAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_sendAllActionPerformed
         // TODO add your handling code here:
         String message = txta_message.getText();
-        server.SendAll(message);
+     //   server.SendAll(message);
         txta_message.setText("");
     }//GEN-LAST:event_btn_sendAllActionPerformed
 
@@ -213,6 +213,8 @@ public class Frm_Server extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Frm_Server.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.chat_app;
+package App;
 
 /**
  *
@@ -12,18 +12,21 @@ package com.mycompany.chat_app;
 public class Message implements java.io.Serializable {
     
         public static enum Message_Type {
-        None, Name, Disconnect , Text , Bitis, Start, UpdateUserList, Rename, 
-        PrivateMsg, CreateNewRoom, NewRoom, SendAllRooms, RoomNameExist, 
-        CompleteCreation, RequestJoinRoom, PasswordRejected,
-        PasswordAccepted, UpdateChatRoomUserList, RoomMSG, 
-        GetOldRoomUsers, RoomUserLeft,RemoveFromMyRoomList,
+        Connect,UpdateClientList,Chat,CreateRoom, UpdateRoomList
     }
 
     public Message_Type type;
     public Object content;
-
+    String sender;
+    
     public Message(Message_Type t) {
         this.type = t;
     }
 
+    public Message(Message_Type type, Object content, String sender) {
+        this.type = type;
+        this.content = content;
+        this.sender=sender;
+    }
+    
 }

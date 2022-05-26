@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.chat_app;
+package App;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,13 +25,16 @@ public class Server extends Thread {
     public ObjectOutputStream clientOutput;
     public ObjectInputStream clientInput;
     public int clientId;
+    int roomId=0;
     public ArrayList<SClient> clients;
+    public ArrayList<Room> rooms;
 
     public Server(int serverPort) throws IOException {
         this.serverPort = serverPort;
         this.serverSocket = new ServerSocket(this.serverPort);
         this.clientId = 0;
         this.clients = new ArrayList<>();
+        this.rooms = new ArrayList<>();
 
     }
 
@@ -70,7 +73,7 @@ public class Server extends Thread {
         }
     }
 
-    public void SendAll(String message) {
+    public void SendAll(Message message) {
         for (SClient client : clients) {
             try {
                 client.clientOutput.writeObject(message);

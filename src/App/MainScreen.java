@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.chat_app;
+package App;
 
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,19 +24,18 @@ public class MainScreen extends javax.swing.JFrame {
      * Creates new form MainScreen
      */
     
-    static Socket clientSocket;
-    static String serverIp = "localhost";//"localhost";//127.0.0.1
-    static int serverPort = 5000;
-    static ObjectOutputStream clientOutput;
-    static ObjectInputStream clientInput;
+    Client c;
     String username;
     public static DefaultListModel lst_messageModel = new DefaultListModel();
+    public static DefaultListModel users = new DefaultListModel();
     public static DefaultListModel lst_clientsModel = new DefaultListModel();
+    public static ArrayList <Integer> Rooms = new ArrayList();
+    
     public MainScreen(String str) {
         initComponents();
         this.username = str;
         room_content_list.setModel(lst_messageModel);
-
+        usersList.setModel(users);
         user_content_list.setModel(lst_clientsModel);
     }
 
@@ -51,8 +49,6 @@ public class MainScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jSpinner1 = new javax.swing.JSpinner();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
         send_room_txt = new javax.swing.JTextField();
         send_user_txt = new javax.swing.JTextField();
         send_room_btn = new javax.swing.JButton();
@@ -66,6 +62,10 @@ public class MainScreen extends javax.swing.JFrame {
         room_content_list = new javax.swing.JList<>();
         jScrollPane4 = new javax.swing.JScrollPane();
         user_content_list = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        usersList = new javax.swing.JList<>();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,6 +74,11 @@ public class MainScreen extends javax.swing.JFrame {
         send_user_btn.setText("Send To User");
 
         create_room_btn.setText("Create New Room");
+        create_room_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                create_room_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Users");
 
@@ -91,39 +96,47 @@ public class MainScreen extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(user_content_list);
 
+        jScrollPane1.setViewportView(usersList);
+
+        jLabel2.setText("Room Chat");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(send_room_btn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(send_user_btn)
-                .addGap(169, 169, 169))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(create_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
-                            .addComponent(send_room_txt, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(room_label, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(send_room_txt)
+                                .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(create_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(room_label, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2)))))
                 .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(conn_btn)
+                        .addContainerGap(226, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox2, 0, 324, Short.MAX_VALUE)
-                            .addComponent(send_user_txt)))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE))
-                .addContainerGap(56, Short.MAX_VALUE))
+                            .addComponent(send_user_txt, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4)
+                            .addComponent(jScrollPane1)
+                            .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(30, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,27 +146,29 @@ public class MainScreen extends javax.swing.JFrame {
                     .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(create_room_btn)
                     .addComponent(conn_btn))
-                .addGap(45, 45, 45)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(room_label))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(send_room_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(send_user_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(send_room_btn)
-                    .addComponent(send_user_btn))
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(send_user_txt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -161,19 +176,26 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void conn_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conn_btnActionPerformed
         // TODO add your handling code here:
-            try {
-            clientSocket = new Socket(serverIp, serverPort);
-            clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-            Message m = new Message(Message.Message_Type.Start);
-            Listener listen = new Listener(clientSocket);
-            m.content=username;
-            listen.start();
-            conn_btn.setEnabled(false);
+        c = new Client(this);
+        try {
+            c.Start(username);
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
+        conn_btn.setEnabled(false);
 
     }//GEN-LAST:event_conn_btnActionPerformed
+
+    private void create_room_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_room_btnActionPerformed
+        // TODO add your handling code here:
+        if(!newRoom_txt.getText().equals("")){
+        Room r = new Room(newRoom_txt.getText(), c);
+        Message msg = new Message(Message.Message_Type.CreateRoom, r, c.username);
+        c.Send(msg);
+        }else{
+            JOptionPane.showMessageDialog(this, "Room name cannot be empty");
+        }
+    }//GEN-LAST:event_create_room_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,6 +223,7 @@ public class MainScreen extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -216,8 +239,9 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton conn_btn;
     private javax.swing.JButton create_room_btn;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
@@ -229,5 +253,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton send_user_btn;
     private javax.swing.JTextField send_user_txt;
     private javax.swing.JList<String> user_content_list;
+    private javax.swing.JList<String> usersList;
     // End of variables declaration//GEN-END:variables
 }
