@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package newpackage;
-
+package com.mycompany.chat_app;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-
 /**
  *
  * @author Kaan
@@ -17,14 +15,15 @@ import javax.swing.DefaultListModel;
 public class Frm_Server extends javax.swing.JFrame {
 
     /**
-     * Creates new form Frm_Server
+     * Creates new form Frm_server
      */
-     Server server;
+    Server server;
     public static DefaultListModel lst_messageModel = new DefaultListModel();
     public static DefaultListModel lst_clientsModel = new DefaultListModel();
     
     public Frm_Server() {
         initComponents();
+        
         lst_messages.setModel(lst_messageModel);
 
         lst_clients.setModel(lst_clientsModel);
@@ -96,10 +95,10 @@ public class Frm_Server extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 641, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 25, Short.MAX_VALUE)
+                    .addGap(0, 14, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -116,7 +115,7 @@ public class Frm_Server extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(10, 10, 10)
                             .addComponent(btn_sendToClient)
-                            .addGap(20, 20, 20)
+                            .addGap(24, 24, 24)
                             .addComponent(btn_sendAll, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGap(20, 20, 20)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,27 +123,27 @@ public class Frm_Server extends javax.swing.JFrame {
                             .addGap(120, 120, 120)
                             .addComponent(jLabel2))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(0, 26, Short.MAX_VALUE)))
+                    .addGap(0, 15, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGap(0, 457, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 27, Short.MAX_VALUE)
+                    .addGap(0, 18, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(10, 10, 10)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txt_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(16, 16, 16)
+                            .addGap(18, 18, 18)
                             .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(20, 20, 20)
                             .addComponent(jLabel3)
                             .addGap(4, 4, 4)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(9, 9, 9)
+                            .addGap(10, 10, 10)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(10, 10, 10)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,7 +153,7 @@ public class Frm_Server extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addGap(4, 4, 4)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGap(0, 27, Short.MAX_VALUE)))
+                    .addGap(0, 19, Short.MAX_VALUE)))
         );
 
         pack();
@@ -214,6 +213,7 @@ public class Frm_Server extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Frm_Server.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */

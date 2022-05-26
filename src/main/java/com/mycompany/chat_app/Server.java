@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package newpackage;
+package com.mycompany.chat_app;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,7 +56,19 @@ public class Server extends Thread {
 
     }
 
-    
+    public void RemoveClient(SClient client) {
+        this.clients.remove(client);
+        RefreshClientList();
+    }
+
+    public void RefreshClientList() {
+        Frm_Server.lst_clientsModel.removeAllElements();
+        for (SClient client : clients) {
+            Frm_Server.lst_clientsModel.addElement("id: " + client.id
+                    + " ip: " + client.clientSocket.getInetAddress().toString()
+                    + "port: " + client.clientSocket.getPort());
+        }
+    }
 
     public void SendAll(String message) {
         for (SClient client : clients) {
@@ -104,19 +116,6 @@ public class Server extends Thread {
 
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public void RemoveClient(SClient client) {
-        this.clients.remove(client);
-        RefreshClientList();
-    }
-
-    public void RefreshClientList() {
-        Frm_Server.lst_clientsModel.removeAllElements();
-        for (SClient client : clients) {
-            Frm_Server.lst_clientsModel.addElement("id: " + client.id
-                    + " ip: " + client.clientSocket.getInetAddress().toString()
-                    + "port: " + client.clientSocket.getPort());
         }
     }
 

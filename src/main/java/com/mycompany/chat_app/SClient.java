@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Server;
+package com.mycompany.chat_app;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Kaan
+ * @author skaya
  */
 public class SClient extends Thread {
 
@@ -30,7 +30,9 @@ public class SClient extends Thread {
             this.clientOutput = new ObjectOutputStream(this.clientSocket.getOutputStream());
             this.clientInput = new ObjectInputStream(this.clientSocket.getInputStream());
             this.id = id;
-
+            Frm_Server.lst_clientsModel.addElement("id: " + this.id
+                    + " ip: " + this.clientSocket.getInetAddress().toString()
+                    + "port: " + this.clientSocket.getPort());
 
         } catch (IOException ex) {
             Logger.getLogger(SClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,16 +48,11 @@ public class SClient extends Thread {
     public void run() {
         try {
             while (this.clientSocket.isConnected()) {
-                String value = this.clientInput.readObject().toString();//blocking
-                if(value.equals("REQRID")){
-                System.out.println(value);
-                this.clientOutput.write(server.roomId);
-                }
+                Message value = (Message)this.clientInput.readObject();//blocking
+                Frm_Server.lst_messageModel.addElement(this.id + ": " + value.content.toString());
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(SClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(SClient.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             this.server.RemoveClient(this);
