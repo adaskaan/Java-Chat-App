@@ -24,7 +24,7 @@ public class SClient extends Thread {
     public ObjectInputStream clientInput;
     String username;
     public int id;
-
+    String room = "lobby";
 
     public SClient(Server server, Socket clientSocket, int id) {
         try {
@@ -61,21 +61,41 @@ public class SClient extends Thread {
                         }
                         updateListMsg.content = users;
                         server.SendAll(updateListMsg);
+
                         break;
-                        
-                   case CreateRoom:
-                      Room r = (Room)value.content;
-                      r.id=server.roomId;
-                      r.userCount=0;
-                       server.rooms.add(r);
-                       server.roomId++;
-                        ArrayList<Room> roomList = new ArrayList<>();
-                        for (int i = 0; i < roomList.size(); i++) {
-                           roomList.add(r);
-                       }
-                       Message UpdateRoomList = new Message(Message.Message_Type.UpdateRoomList);
-                       UpdateRoomList.content = roomList;
-                       server.SendAll(UpdateRoomList);
+
+                    case CreateRoom:
+                        String roomName = value.content.toString();
+                        server.rooms.add(roomName);
+                        Message updateroom = new Message(Message.Message_Type.UpdateRoomList);
+                        updateroom.content = server.rooms;
+                        server.SendAll(updateroom);
+                        break;
+                    case UserChat:
+                        String search = value.reciever;
+                        for (int i = 0; i < server.clients.size(); i++) {
+                            if (server.clients.get(i).username.equals(search)) {
+                                server.SendToClient(server.clients.get(i), value);
+                            }
+                        }
+                        break;
+                    case RoomChat:
+
+                        String r = room;
+                        for (int i = 0; i < server.clients.size(); i++) {
+                            if (r.equals(server.clients.get(i).room)) {
+                                server.SendToRoom(server.clients.get(i), value);
+
+                            }
+                        }
+                        break;
+                    case Refresh:
+                        Message roomUpdate = new Message(Message.Message_Type.UpdateRoomList);
+                        roomUpdate.content = server.rooms;
+                        server.SendToClient(this, roomUpdate);
+                        break;
+                    case JoinRoom:
+                        this.room = value.content.toString();
                         break;
                 }
             }
@@ -84,7 +104,7 @@ public class SClient extends Thread {
             Logger.getLogger(SClient.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             this.server.RemoveClient(this);
-            
+
         }
     }
 }

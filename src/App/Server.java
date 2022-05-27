@@ -25,9 +25,8 @@ public class Server extends Thread {
     public ObjectOutputStream clientOutput;
     public ObjectInputStream clientInput;
     public int clientId;
-    int roomId=0;
     public ArrayList<SClient> clients;
-    public ArrayList<Room> rooms;
+    public ArrayList<String> rooms;
 
     public Server(int serverPort) throws IOException {
         this.serverPort = serverPort;
@@ -84,7 +83,7 @@ public class Server extends Thread {
         }
     }
 
-    public void SendToClient(SClient client, String message) {
+    public void SendToClient(SClient client, Message message) {
 
         try {
             client.clientOutput.writeObject(message);
@@ -94,7 +93,17 @@ public class Server extends Thread {
         }
 
     }
+    public void SendToRoom(SClient client, Message message){
 
+                try {
+                    client.clientOutput.writeObject(message);
+                } catch (IOException ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+ 
+  
+    
     public void SendToClient(int index, String message) {
         try {
             this.clients.get(index).clientOutput.writeObject(message);

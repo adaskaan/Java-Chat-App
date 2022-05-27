@@ -161,7 +161,7 @@ public class Frm_Server extends javax.swing.JFrame {
 
     private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
         // TODO add your handling code here:
-
+        btn_start.setEnabled(false);
         try {
             int port = Integer.parseInt(txt_port.getText());
             server = new Server(port);

@@ -12,21 +12,30 @@ package App;
 public class Message implements java.io.Serializable {
     
         public static enum Message_Type {
-        Connect,UpdateClientList,Chat,CreateRoom, UpdateRoomList
-    }
+        Connect,UpdateClientList,UserChat,CreateRoom, UpdateRoomList,RoomChat,Refresh, JoinRoom
+        }
 
     public Message_Type type;
     public Object content;
     String sender;
+    String reciever;
     
     public Message(Message_Type t) {
         this.type = t;
     }
 
-    public Message(Message_Type type, Object content, String sender) {
+    public Message(Message_Type type, Object content, String sender, String reciever) {
         this.type = type;
         this.content = content;
         this.sender=sender;
+        this.reciever=reciever;
     }
+
+    public Message(Message_Type type, Object content, String sender) {
+            this.type = type;
+            this.content = content; 
+            this.sender = sender;
+    }
+    
     
 }

@@ -9,14 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
  *
- * @author skaya
+ * @author Kaan
  */
 public class Client {
 
@@ -28,6 +27,7 @@ public class Client {
     Listen listen;
     MainScreen ms;
     String username;
+    String room = "lobby";
     int roomId;
 
     public Client(MainScreen ms) {
@@ -80,7 +80,19 @@ public class Client {
                             }
                             break;
                         case UpdateRoomList:
-                            
+                            ArrayList<String> rooms = (ArrayList)received.content;
+                            MainScreen.Rooms = rooms;
+                            MainScreen.lst_roomsModel.removeAllElements();
+                            for (int i = 0; i < rooms.size(); i++) {
+                                MainScreen.lst_roomsModel.addElement(rooms.get(i));
+                            }
+                            break;
+                        case UserChat:
+                            MainScreen.lst_clientsModel.addElement(received.sender+" : "+received.content.toString());
+                            break;
+                        case RoomChat:
+                            MainScreen.lst_messageModel.addElement(received.sender+" : "+received.content.toString());
+                            break;
                     }
                 } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(Listen.class.getName()).log(Level.SEVERE, null, ex);

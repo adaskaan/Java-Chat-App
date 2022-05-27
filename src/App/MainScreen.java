@@ -29,7 +29,8 @@ public class MainScreen extends javax.swing.JFrame {
     public static DefaultListModel lst_messageModel = new DefaultListModel();
     public static DefaultListModel users = new DefaultListModel();
     public static DefaultListModel lst_clientsModel = new DefaultListModel();
-    public static ArrayList <Integer> Rooms = new ArrayList();
+    public static DefaultListModel lst_roomsModel = new DefaultListModel();
+    public static ArrayList <String> Rooms = new ArrayList();
     
     public MainScreen(String str) {
         initComponents();
@@ -37,6 +38,7 @@ public class MainScreen extends javax.swing.JFrame {
         room_content_list.setModel(lst_messageModel);
         usersList.setModel(users);
         user_content_list.setModel(lst_clientsModel);
+        room_list.setModel(lst_roomsModel);
     }
 
     /**
@@ -65,13 +67,27 @@ public class MainScreen extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         usersList = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        room_list = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
+        refresh_btn = new javax.swing.JButton();
+        join_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         send_room_btn.setText("Send To Room");
+        send_room_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                send_room_btnActionPerformed(evt);
+            }
+        });
 
         send_user_btn.setText("Send To User");
+        send_user_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                send_user_btnActionPerformed(evt);
+            }
+        });
 
         create_room_btn.setText("Create New Room");
         create_room_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -100,75 +116,105 @@ public class MainScreen extends javax.swing.JFrame {
 
         jLabel2.setText("Room Chat");
 
+        jScrollPane2.setViewportView(room_list);
+
+        jLabel3.setText("Client Chat");
+
+        refresh_btn.setText("Refresh Rooms");
+        refresh_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refresh_btnActionPerformed(evt);
+            }
+        });
+
+        join_btn.setText("Join Room");
+        join_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                join_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(send_room_txt)
-                                .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(create_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(room_label, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2)))))
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(conn_btn)
-                        .addContainerGap(226, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(send_room_txt)
+                        .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(create_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
+                    .addComponent(room_label, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(send_user_txt, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4)
-                            .addComponent(jScrollPane1)
-                            .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(30, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(refresh_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(join_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(send_user_txt, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4)
+                        .addComponent(jScrollPane1)
+                        .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(conn_btn))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(create_room_btn)
-                    .addComponent(conn_btn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(newRoom_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(create_room_btn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(conn_btn)
+                        .addGap(16, 16, 16)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(room_label))
-                .addGap(18, 18, 18)
+                    .addComponent(room_label, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(send_room_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(send_user_txt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(send_room_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(send_user_txt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(send_user_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(send_room_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(refresh_btn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(join_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -179,6 +225,7 @@ public class MainScreen extends javax.swing.JFrame {
         c = new Client(this);
         try {
             c.Start(username);
+            lst_messageModel.addElement("(Now talking to Lobby)");
         } catch (IOException ex) {
             Logger.getLogger(MainScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -189,13 +236,52 @@ public class MainScreen extends javax.swing.JFrame {
     private void create_room_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_room_btnActionPerformed
         // TODO add your handling code here:
         if(!newRoom_txt.getText().equals("")){
-        Room r = new Room(newRoom_txt.getText(), c);
-        Message msg = new Message(Message.Message_Type.CreateRoom, r, c.username);
+        String roomName = newRoom_txt.getText();
+        Message msg = new Message(Message.Message_Type.CreateRoom);
+        msg.content = roomName;
         c.Send(msg);
+        newRoom_txt.setText("");
         }else{
             JOptionPane.showMessageDialog(this, "Room name cannot be empty");
         }
     }//GEN-LAST:event_create_room_btnActionPerformed
+
+    private void send_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_send_user_btnActionPerformed
+        // TODO add your handling code here:
+        if(!usersList.getSelectedValue().equals("")|!send_user_txt.getText().equals("")){
+            String text = send_user_txt.getText();
+            Message msg = new Message(Message.Message_Type.UserChat, text, c.username,usersList.getSelectedValue());
+            c.Send(msg);
+        }
+    }//GEN-LAST:event_send_user_btnActionPerformed
+
+    private void send_room_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_send_room_btnActionPerformed
+        // TODO add your handling code here:
+       String str= send_room_txt.getText();
+       Message msg = new Message(Message.Message_Type.RoomChat,str, c.username);
+       c.Send(msg);
+       send_room_txt.setText("");
+    }//GEN-LAST:event_send_room_btnActionPerformed
+
+    private void refresh_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refresh_btnActionPerformed
+        // TODO add your handling code here:
+        Message msg = new Message(Message.Message_Type.Refresh);
+        c.Send(msg);
+    }//GEN-LAST:event_refresh_btnActionPerformed
+
+    private void join_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_join_btnActionPerformed
+        // TODO add your handling code here:
+        if(!room_list.getSelectedValue().equals("")){
+            c.room=room_list.getSelectedValue();
+            Message msg = new Message(Message.Message_Type.JoinRoom);
+            msg.content = room_list.getSelectedValue();
+            c.Send(msg);
+            lst_messageModel.removeAllElements();
+            lst_messageModel.addElement("(Now Talking To "+c.room+")");
+        }else{
+            JOptionPane.showMessageDialog(this, "Please Select A Room ");
+        }
+    }//GEN-LAST:event_join_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -238,16 +324,20 @@ public class MainScreen extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton conn_btn;
     private javax.swing.JButton create_room_btn;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JButton join_btn;
     private javax.swing.JTextField newRoom_txt;
+    private javax.swing.JButton refresh_btn;
     private javax.swing.JList<String> room_content_list;
     private javax.swing.JLabel room_label;
+    private javax.swing.JList<String> room_list;
     private javax.swing.JButton send_room_btn;
     private javax.swing.JTextField send_room_txt;
     private javax.swing.JButton send_user_btn;
